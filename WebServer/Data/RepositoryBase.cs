@@ -33,9 +33,9 @@ namespace WebServer.Data
                 .Where(expression).ToListAsync();
         }
 
-        public async void UpdateAsync(T entity)
+        public void UpdateAsync(T entity)
         {
-            await dataContext.Set<T>().Update(entity).ReloadAsync();
+            dataContext.Set<T>().Update(entity);
         }
     }
 }

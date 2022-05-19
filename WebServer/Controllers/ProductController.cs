@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using WebServer.Data.Interfaces;
 using WebServer.Models;
 
@@ -40,9 +41,17 @@ namespace WebServer.Controllers
         }
 
         // PUT api/<ProductController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{id},{name},{default_quantity}")]
+        public HttpResponseMessage Put(int id, string name, int default_quantity)
         {
+            var product = new Product();
+            product.Id = id;
+            product.Name = name;
+            product.Default_quantity = default_quantity;
+            repository.Product.UpdateAsync(product);
+
+            repository.Save();
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
         // DELETE api/<ProductController>/5
