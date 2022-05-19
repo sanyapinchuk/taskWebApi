@@ -29,7 +29,6 @@ namespace WebServer.Data
                 else
                     addCount = 1;
             }
-
             
             var fridge_products = (
                     from pr_fr in dataContext.Fridges_Products
@@ -50,11 +49,48 @@ namespace WebServer.Data
             }
             else
             {
-
                 //increment quantity
                 fridge_products.First().Quantity += addCount;
-
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idFridge"></param>
+        /// <param name="idProduct"></param>
+        /// <param name="deleteAll"> true if need delete all products in fridge</param>
+        /// <returns>
+        /// true if removed smth, false if not
+        /// </returns>
+        public async Task<bool> DeleteProductAsync(int idFridge, int idProduct, bool deleteAll = false)
+        {
+
+            var fridge_products = (
+                    from pr_fr in dataContext.Fridges_Products
+                    where pr_fr.FridgeId == idFridge
+                    where pr_fr.ProductId == idProduct
+                    select pr_fr
+                    ).ToList();
+            if (fridge_products.Count == 0)
+            {
+                // nothing to remove
+                return false;
+            }
+            else
+            {
+
+                //increment quantity
+                var fr_pr = fridge_products.First();
+                if(deleteAll)
+                    await Task.Run(() =>DeleteAsync(fr_pr));
+                else
+                {
+                    fr_pr.Quantity--;
+                }
+                return true;
+            }
+
         }
     }
 }

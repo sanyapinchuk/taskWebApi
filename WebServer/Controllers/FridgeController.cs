@@ -78,9 +78,31 @@ namespace WebServer.Controllers
         }
 
         // DELETE api/<FridgeController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{idFridge},{idProduct}")]
+        public async Task<HttpResponseMessage> Delete(int idFridge, int idProduct, bool deleteAll=false)
         {
+            var fridge = await repository.Fridge.GetFridgeByIdAsync(idFridge);
+
+            if (fridge == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+
+            var product = await repository.Product.GetProductByIdAsync(idProduct);
+            if (product == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+            var resultDel = repository.FridgeProduct.DeleteProductAsync(idFridge, idProduct, deleteAll).Result;
+            if(resultDel)
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK);
+                repository.Save();
+            }
+            else
+            {               
+                return new HttpResponseMessage(HttpStatusCode.Gone);
+            }
         }
     }
 }
