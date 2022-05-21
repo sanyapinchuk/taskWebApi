@@ -7,7 +7,7 @@ using WebServer.Models;
 
 namespace WebServer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Product")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -18,46 +18,45 @@ namespace WebServer.Controllers
             this.repository = repository;
         }
 
-
-        // GET: api/<ProductController>
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> Get()
+        [Route("getAll")]
+        
+        public async Task<ActionResult<List<Product>>> GetAllProducts()
         {
-
             return Ok(await repository.Product.GetAllAsync());
         }
-
-        // GET api/<ProductController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        
+        /*[HttpPut]
+        [Route("/kal/{id}")]
+        public void Put2(int id)
         {
-            return "value";
-        }
 
-        // POST api/<ProductController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        }*/
+        
+        [HttpPut]
+        [Route("changeProduct/{id}")]                
+        public async Task<HttpResponseMessage> Put(int id, string? name, int? default_quantity)
         {
-        }
+            var prdct = await repository.Product.GetProductByIdAsync(id);
+            if(prdct!=null)
+            {
+                var product = new Product();
+                product.Id = id;
+                if(name!=null)
+                    product.Name = name;
+                product.Name = prdct.Name;
+                if (default_quantity != null)
+                    product.Default_quantity = default_quantity;
+                else
+                    product.Default_quantity = prdct.Default_quantity;
+                repository.Product.UpdateAsync(product);
 
-        // PUT api/<ProductController>/5
-        [HttpPut("{id},{name},{default_quantity}")]
-        public HttpResponseMessage Put(int id, string name, int default_quantity)
-        {
-            var product = new Product();
-            product.Id = id;
-            product.Name = name;
-            product.Default_quantity = default_quantity;
-            repository.Product.UpdateAsync(product);
+                repository.Save();
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            return new HttpResponseMessage(HttpStatusCode.NotFound);
 
-            repository.Save();
-            return new HttpResponseMessage(HttpStatusCode.OK);
         }
-
-        // DELETE api/<ProductController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
     }
 }

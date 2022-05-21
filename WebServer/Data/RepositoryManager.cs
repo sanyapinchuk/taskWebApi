@@ -54,6 +54,23 @@ namespace WebServer.Data
                 return fridgeProductRepository;
             }
         }
+        public async Task<bool> IsValidId(int idFridge, int idProduct)
+        {
+            var fridge = await Fridge.GetFridgeByIdAsync(idFridge);
+
+            if (fridge == null)
+            {
+                return false;
+            }
+
+            var product = await Product.GetProductByIdAsync(idProduct);
+            if (product == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public void Save()
         {
             dataContext.SaveChanges();

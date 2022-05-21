@@ -6,6 +6,8 @@
         FridgeModelRepository FridgeModel { get; }
         ProductRepository Product { get; } 
         FridgeProductRepository FridgeProduct { get; }
+
+        public Task<bool> IsValidId(int idFridge, int idProduct);
         void Save();
     }
 }

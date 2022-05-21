@@ -4,6 +4,6 @@ namespace WebServer.Data.Interfaces
 {
     public interface IProductRepository
     {
-        Task<Product?> GetProductByIdAsync(int idProduct);
+        public Task<Product?> GetProductByIdAsync(int idProduct);
     }
 }

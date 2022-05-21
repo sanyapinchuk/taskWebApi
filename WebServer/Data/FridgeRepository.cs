@@ -25,15 +25,13 @@ namespace WebServer.Data
                 list.Add((product.Name, product.Quantity));
             }
 
-
             return list;
-
         }
 
         public async Task<Fridge?> GetFridgeByIdAsync(int idFridge)
         {
             return await dataContext.Fridges.Where(f => f.Id == idFridge)
-                                                  .FirstAsync();
+                                                  .FirstOrDefaultAsync();
         }
     }
 }

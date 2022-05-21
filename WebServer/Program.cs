@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    
 });
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 
@@ -22,6 +23,8 @@ builder.Services.AddMvc(options =>
     options.ModelBinderProviders.Insert(0, new TupleModelBinderProvider());
 });
 
+builder.Services.AddControllersWithViews();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,9 +34,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();     // нет определенных маршрутов
+});
+
+app.UseHttpsRedirection();
 
 app.MapControllers();
 

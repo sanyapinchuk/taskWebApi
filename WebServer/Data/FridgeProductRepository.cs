@@ -9,11 +9,32 @@ namespace WebServer.Data
 
         }
 
-        public async void AddNewProductAsync(int idFridge, int idProduct, int? count)
+
+        public IEnumerable<Fridge_Product> GetFridgeProductWithZeroQuantity()
+        {
+            return dataContext.Fridges_Products.FromSqlRaw("EXEC AddProductDefaultQuantity");
+        }
+
+       
+
+        public async Task<Fridge_Product?> GetFridgeProductAsync(int idFridge, int idProduct)
+        {
+            return await dataContext.Fridges_Products
+                .Where(fr_pr => fr_pr.ProductId == idProduct)
+                .Where(fr_pr => fr_pr.FridgeId == idFridge).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// add product to fridge (to table fridgeProduct)
+        /// </summary>
+        /// <param name="idFridge">Fridge id</param>
+        /// <param name="idProduct"> Product id</param>
+        /// <param name="count">count ot add. If null add defaultQuantity from table Product. If defaultQuantity == null, add 1</param>
+        public void AddNewProductAsync(int idFridge, int idProduct, int? count)
         {
             //get result quantity for product
             int addCount;
-            var defaultCount = ((Product) (
+            var defaultCount =((Product) (
                                         from product in dataContext.Products
                                         where product.Id == idProduct
                                         select product
@@ -92,5 +113,6 @@ namespace WebServer.Data
             }
 
         }
+
     }
 }

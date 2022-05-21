@@ -11,7 +11,7 @@ namespace WebServer.Data
 
         public async Task<Product?> GetProductByIdAsync(int idProduct)
         {
-            return await dataContext.Products.Where(p => p.Id == idProduct).FirstAsync();
+            return await dataContext.Products.Where(p => p.Id == idProduct).FirstOrDefaultAsync();
         }
     }
 }
