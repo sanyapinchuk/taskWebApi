@@ -10,19 +10,20 @@ namespace WebServer.Data
 
         }
 
-        public async Task<IList<(string Name, int Quantity)>> GetAllProductInFridge(int idFridge)
+        public async Task<IList<Product>> GetAllProductInFridge(int idFridge)
         {
             var objs =await ( from product in dataContext.Products
                        join pr_fr in dataContext.Fridges_Products
                        on product.Id equals pr_fr.ProductId
                        where pr_fr.FridgeId == idFridge
-                       select new { product.Name, pr_fr.Quantity }
+                       select new { product, pr_fr.Quantity }
                        )
                        .ToListAsync();
-            var list = new List<(string Name, int Quantity)>();
-            foreach (var product in objs)
+            var list = new List<Product>();
+            foreach (var productAnon in objs)
             {
-                list.Add((product.Name, product.Quantity));
+                productAnon.product.Default_quantity = productAnon.Quantity;
+                list.Add(productAnon.product);
             }
 
             return list;

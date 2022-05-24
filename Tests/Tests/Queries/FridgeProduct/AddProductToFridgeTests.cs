@@ -109,6 +109,7 @@ namespace Tests.Queries.FridgeProduct
         }
 
         [Fact]
+
         public async Task AddProductToFridgeWithExistProductWithoutCount_Success()
         {
             //Act

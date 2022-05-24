@@ -45,9 +45,7 @@ namespace WebServer.Controllers
             {
                 var a = await repository.Fridge.GetAllProductInFridge(idFridge);
 
-                //var products = new List<{string Name, int } >();
-                var json = JsonConvert.SerializeObject(a, Formatting.Indented);
-                return Ok(json);
+                return Ok(a);
             }
             else
                 return StatusCode(400, "Fridge doesn't exist");
