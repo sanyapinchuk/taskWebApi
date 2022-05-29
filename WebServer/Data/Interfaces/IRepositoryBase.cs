@@ -8,6 +8,6 @@ namespace WebServer.Data.Interfaces
         public Task<IEnumerable<T>> GetByCondition(Expression<Func<T, bool>> expression);
         void  CreateAsync(T entity);
         void UpdateAsync(T entity);
-        void DeleteAsync(T entity);
+        void Delete(T entity);
     }
 }

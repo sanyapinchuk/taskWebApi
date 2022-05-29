@@ -17,7 +17,7 @@ namespace WebServer.Data
             await dataContext.Set<T>().AddAsync(entity);
         }
 
-        public void DeleteAsync(T entity)
+        public void Delete(T entity)
         {
              dataContext.Set<T>().Remove(entity);
         }
@@ -35,7 +35,9 @@ namespace WebServer.Data
 
         public void UpdateAsync(T entity)
         {
+            dataContext.Entry(entity).State = EntityState.Modified;
             dataContext.Set<T>().Update(entity);
+            
         }
     }
 }

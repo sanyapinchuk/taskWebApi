@@ -7,10 +7,10 @@ namespace WebServer.Models
         public int Id { get; set; }
 
         public int FridgeId { get; set; }
-        public virtual Fridge Fridge { get; set; }
+        public virtual Fridge? Fridge { get; set; }
 
         public int ProductId { get; set; }  
-        public virtual Product Product { get; set; }
+        public virtual Product? Product { get; set; }
 
         public int Quantity { get; set; } 
     }

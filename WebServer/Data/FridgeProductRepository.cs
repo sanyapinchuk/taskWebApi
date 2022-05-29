@@ -80,7 +80,7 @@ namespace WebServer.Data
         /// </summary>
         /// <param name="idFridge"></param>
         /// <param name="idProduct"></param>
-        /// <param name="deleteAll"> true if need delete all products in fridge</param>
+        /// <param name="deleteAll"> true if need delete all this type products in fridge</param>
         /// <returns>
         /// true if removed smth, false if not
         /// </returns>
@@ -102,9 +102,9 @@ namespace WebServer.Data
             {
 
                 //increment quantity
-                var fr_pr = fridge_products.First();
+                var fr_pr = fridge_products.FirstOrDefault();
                 if(deleteAll)
-                    await Task.Run(() =>DeleteAsync(fr_pr));
+                    Delete(fr_pr);
                 else
                 {
                     fr_pr.Quantity--;

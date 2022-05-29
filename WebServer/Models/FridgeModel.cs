@@ -9,6 +9,6 @@ namespace WebServer.Models
         public string Name { get; set; } = String.Empty;
         public int? Year { get; set; }
 
-        public virtual List<Fridge> Fridges { get; set; }
+        public virtual List<Fridge>? Fridges { get; set; }
     }
 }

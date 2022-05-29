@@ -19,42 +19,37 @@ namespace WebServer.Controllers
         }
 
         [HttpGet]
-        [Route("getAll")]
-        
+        [Route("{id}")]
+        public async Task<ActionResult<Product>> GetProduct(int id)
+        {
+            return  Ok(await repository.Product.GetProductByIdAsync(id));
+        }
+
+        [HttpGet]
+        [Route("getAll")]        
         public async Task<ActionResult<List<Product>>> GetAllProducts()
         {
             return Ok(await repository.Product.GetAllAsync());
         }
         
-        /*[HttpPut]
-        [Route("/kal/{id}")]
-        public void Put2(int id)
-        {
-
-        }*/
-        
+       
         [HttpPut]
-        [Route("changeProduct/{id}")]                
-        public async Task<HttpResponseMessage> Put(int id, string? name, int? default_quantity)
+        [Route("Edit/{id}")]                
+        public async Task<ActionResult> Put(int id, [FromBody] Product product)
         {
-            var prdct = await repository.Product.GetProductByIdAsync(id);
-            if(prdct!=null)
+                var prdctDb = await repository.Product.GetProductByIdAsync(id);
+            if(prdctDb!=null)
             {
-                var product = new Product();
-                product.Id = id;
-                if(name!=null)
-                    product.Name = name;
-                product.Name = prdct.Name;
-                if (default_quantity != null)
-                    product.Default_quantity = default_quantity;
-                else
-                    product.Default_quantity = prdct.Default_quantity;
+               /* prdctDb.Default_quantity = product.Default_quantity;
+                prdctDb.Name = product.Name;
+                */
+                product.Id = prdctDb.Id;
                 repository.Product.UpdateAsync(product);
-
                 repository.Save();
-                return new HttpResponseMessage(HttpStatusCode.OK);
+
+                return StatusCode(200);
             }
-            return new HttpResponseMessage(HttpStatusCode.NotFound);
+            return StatusCode(404);
 
         }
         
