@@ -64,8 +64,6 @@ namespace WebServer.Data
                 fr_pr.FridgeId = idFridge;
                 fr_pr.ProductId = idProduct;
                 fr_pr.Quantity = addCount;
-                //dataContext.Fridges_Products.Add(fr_pr);
-                //CreateAsync(fr_pr);
                 dataContext.Fridges_Products.Add(fr_pr);
             }
             else
@@ -84,7 +82,7 @@ namespace WebServer.Data
         /// <returns>
         /// true if removed smth, false if not
         /// </returns>
-        public async Task<bool> DeleteProductAsync(int idFridge, int idProduct, bool deleteAll = false)
+        public bool DeleteProductAsync(int idFridge, int idProduct, bool deleteAll = false)
         {
 
             var fridge_products = (
@@ -100,9 +98,10 @@ namespace WebServer.Data
             }
             else
             {
-
-                //increment quantity
+                //decrement quantity
                 var fr_pr = fridge_products.FirstOrDefault();
+                if(fr_pr == null)
+                    throw new NullReferenceException();
                 if(deleteAll)
                     Delete(fr_pr);
                 else

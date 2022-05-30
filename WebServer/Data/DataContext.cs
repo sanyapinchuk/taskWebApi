@@ -35,6 +35,5 @@ namespace WebServer.Data
         public DbSet<Fridge_Product> Fridges_Products { get; set; }
         public DbSet<FridgeModel> FridgeModels { get; set; }
 
-//        public DbSet<TempModel> TempModels { get; set; }
     }
 }

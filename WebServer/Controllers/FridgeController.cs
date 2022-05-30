@@ -191,7 +191,7 @@ namespace WebServer.Controllers
             {
                 return StatusCode(400, "Doesn't exist this idProduct");
             }
-            var resultDel = repository.FridgeProduct.DeleteProductAsync(idFridge, idProduct, true).Result;
+            var resultDel = repository.FridgeProduct.DeleteProductAsync(idFridge, idProduct, true);
             if(resultDel)
             {
                 repository.Save();
