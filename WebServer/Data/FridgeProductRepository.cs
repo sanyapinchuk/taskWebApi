@@ -12,7 +12,7 @@ namespace WebServer.Data
 
         public IEnumerable<Fridge_Product> GetFridgeProductWithZeroQuantity()
         {
-            return dataContext.Fridges_Products.FromSqlRaw("EXEC AddProductDefaultQuantity");
+            return dataContext.Fridges_Products.FromSqlRaw("EXEC GetFridgesWithZeroQuantity");
         }
 
        

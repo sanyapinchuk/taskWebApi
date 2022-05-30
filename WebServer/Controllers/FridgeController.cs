@@ -12,18 +12,13 @@ namespace WebServer.Controllers
     public class FridgeController : ControllerBase
     {
         private readonly IRepositoryManager repository;
-        /*public FridgeController(DataContext dataContext)
-        {
-            this.dataContext = dataContext;
-        }*/
 
          public FridgeController(IRepositoryManager repository)
          {
              this.repository = repository;
          }
 
-        // GET: api/<FridgeController>
-        // [Route("getAll")]
+
         [HttpGet]
         [Route("getAll")]
         public async Task<ActionResult<List<Fridge>>> GetAllFridges()
@@ -39,7 +34,7 @@ namespace WebServer.Controllers
             return Ok(await repository.Fridge.GetFridgeByIdAsync(id));
         }
 
-        // GET api/<FridgeController>/5
+
         [HttpGet]
         [Route("getProducts/{idFridge:int}")]
         public async Task<ActionResult<List<Product>>> Get(int idFridge)
@@ -83,44 +78,10 @@ namespace WebServer.Controllers
 
         }
 
-
-        // POST api/<FridgeController>
-        /*[HttpPost]
-        [Route("addProduct")]
-        public async Task<IActionResult> AddProductToFridge( int? idFridge,
-                                        int? idProduct, [Optional] int? count)
-        {
-            if (idFridge == null || idProduct == null)
-                return StatusCode(400, "Shouldn't be null");
-
-            var fridge = await repository.Fridge.GetFridgeByIdAsync((int)idFridge);
-
-            if(fridge == null)
-            {
-                return StatusCode(400, "Fridge doesn't exist");
-            }    
-
-            var product = await repository.Product.GetProductByIdAsync((int)idProduct);
-            if(product == null)
-            {
-                return StatusCode(400, "Product doesn't exist");
-            }
-            if(count!= null&& count < 0)
-            {
-                return StatusCode(400, "Count should be > 0");
-            }
-
-            repository.FridgeProduct.AddNewProductAsync((int)idFridge, (int)idProduct, count);
-            repository.Save();
-
-            return StatusCode(200);
-
-        }*/
         [HttpPost]
         [Route("addProduct")]
         public async Task<IActionResult> AddProductToFridge([FromBody]Fridge_Product fr_pr)
         {
-            
 
             var fridge = await repository.Fridge.GetFridgeByIdAsync(fr_pr.FridgeId);
 
@@ -190,37 +151,14 @@ namespace WebServer.Controllers
             return StatusCode(204, "Fridge with this id doesn't exist");
         }
 
-
-        /*
-        [HttpPost] 
-        [Route("addFridge")]
-        public async Task<IActionResult> AddFridgeAsync(string Name, string Owner_name, int FridgeModelId)
-        {
-            if (Name == null)
-            {
-                return StatusCode(400, "name shouldn't be null");
-            }
-            if (repository.FridgeModel.GetFridgeModelAsync(FridgeModelId) != null)
-            {
-                await Task.Run(() => repository.Fridge.CreateFridge(Name, Owner_name, FridgeModelId));
-                return StatusCode(201, "Created");
-            }
-            return StatusCode(400, "Bad modelId");
-
-        }
-        */
-
-        [HttpPost]
+        [HttpPut]
         [Route("addDefaultProduct")]
-        public async Task<IActionResult> AddProductDefaultQuantityPost()
+        public IActionResult AddProductDefaultQuantityPut()
         {
             var fr_prZeroProduct = repository.FridgeProduct.GetFridgeProductWithZeroQuantity();
             int countAdded = 0;
             foreach(var fridgeProduct in fr_prZeroProduct)
             {
-                 /*  await Task.Run(() => repository.FridgeProduct
-                               .AddNewProductAsync(fridgeProduct.FridgeId,
-                               fridgeProduct.ProductId, null));*/
                 repository.FridgeProduct
                                .AddNewProductAsync(fridgeProduct.FridgeId,
                                fridgeProduct.ProductId, null);

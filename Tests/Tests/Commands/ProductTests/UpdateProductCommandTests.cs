@@ -21,23 +21,23 @@ namespace Tests.Commands.FridgeTests
             var Name = "Творог";
             var Default_Quantity = 5;
 
-            var product2 = new Product
+            var product2 = new Product()
             {
                 Id = Id,
                 Name = Name,
                 Default_quantity = Default_Quantity
             };
+            
+ 
+           var product  = await dataContext.Products.Where(p => p.Id == Id)
+                                           .FirstOrDefaultAsync();
+          
+            //Act
+            product.Default_quantity = Default_Quantity;
+            product.Name = Name;
+            
+            await dataContext.SaveChangesAsync();
 
-
-            // repository.Product.UpdateAsync(product2);
-            var pr = await repository.Product.GetProductByIdAsync(Id);
-            if (pr == null)
-                throw new Xunit.Sdk.NullException(pr);
-            pr.Default_quantity = Default_Quantity;
-            pr.Name = Name;
-            repository.Save();
-           //repository.Save();
-           //dataContext.SaveChanges();
            //Assert
             Assert.NotNull(
                 await dataContext.Products.SingleOrDefaultAsync(product =>

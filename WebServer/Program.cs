@@ -40,7 +40,7 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllers();     // нет определенных маршрутов
+    endpoints.MapControllers();   
 });
 
 app.UseHttpsRedirection();

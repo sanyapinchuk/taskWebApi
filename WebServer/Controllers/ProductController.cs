@@ -37,12 +37,9 @@ namespace WebServer.Controllers
         [Route("Edit/{id}")]                
         public async Task<ActionResult> Put(int id, [FromBody] Product product)
         {
-                var prdctDb = await repository.Product.GetProductByIdAsync(id);
+            var prdctDb = await repository.Product.GetProductByIdAsync(id);
             if(prdctDb!=null)
             {
-               /* prdctDb.Default_quantity = product.Default_quantity;
-                prdctDb.Name = product.Name;
-                */
                 product.Id = prdctDb.Id;
                 repository.Product.UpdateAsync(product);
                 repository.Save();
