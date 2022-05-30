@@ -1,11 +1,29 @@
+global using WebServer.Data;
+global using Microsoft.EntityFrameworkCore;
+using WebServer.Data.Interfaces;
+using M6T.Core.TupleModelBinder;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    
+});
+builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMvc(options =>
+{
+    options.ModelBinderProviders.Insert(0, new TupleModelBinderProvider());
+});
+
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -16,9 +34,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();   
+});
+
+app.UseHttpsRedirection();
 
 app.MapControllers();
 
